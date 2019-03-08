@@ -6,10 +6,10 @@ from flask_heroku import Heroku
 
 app = Flask(__name__)
 CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = ""#Heroku URI goes here
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://rendqgrljvlgid:9906c2c45fd1ea7cc41b98084b3a7cf650436fca86985ac15574075bc3728515@ec2-54-83-44-4.compute-1.amazonaws.com:5432/d1h0n2hj61u431"#Heroku URI goes here
 
 heroku = Heroku(app)
-db + SQLAlchemy(app)
+db = SQLAlchemy(app)
 
 class Book(db.Model):
     __tablename__ = "books" #creating a table for all our information
@@ -44,8 +44,8 @@ def books_input():
 
 @app.route("/books", methods=["GET"])
 def return_books():
-    all_books = db.session.query(Book.title, Book.author).all()
-    return jasonify(all_books)
+    all_books = db.session.query(Book.id, Book.title, Book.author).all()
+    return jsonify(all_books)
 
 if __name__ == "__main__":
     app.debug = True
